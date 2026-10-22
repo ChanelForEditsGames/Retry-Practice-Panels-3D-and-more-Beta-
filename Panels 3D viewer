@@ -672,14 +672,14 @@ NightDay.MouseButton1Click:Connect(function()
         NightDay.Text = Lighting.ClockTime
         Lighting.ClockTime = 12
     elseif TimeNumber == 2 then
-        Lighting.ClockTime = 20
+        Lighting.ClockTime = 18
         NightDay.Text = Lighting.ClockTime
     elseif TimeNumber == 3 then
         NightDay.Text = Lighting.ClockTime
-        Lighting.ClockTime = 1
+        Lighting.ClockTime = 23
     elseif TimeNumber == 4 then
         NightDay.Text = Lighting.ClockTime
-        Lighting.Clock = 5
+        Lighting.ClockTime = 5
     elseif TimeNumber == 5 then
         NightDay.Text = Lighting.ClockTime
         Lighting.ClockTime = 9
