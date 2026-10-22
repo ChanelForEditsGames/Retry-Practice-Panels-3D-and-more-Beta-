@@ -649,6 +649,93 @@ UIS.JumpRequest:Connect(function()
 end)
 
 
+local CamlockActive = false
+local CamlockConnection
+local OriginalCameraOffset
+local OriginalAutoRotate
+local OriginalMouseBehavior
+
+local function EnableCamlock()
+    if not hum or not root then
+        return
+    end
+
+    OriginalCameraOffset = hum.CameraOffset
+    OriginalAutoRotate = hum.AutoRotate
+    OriginalMouseBehavior = UIS.MouseBehavior
+
+    hum.CameraOffset = Vector3.new(1.75, 0, 0)
+    hum.AutoRotate = false
+
+    CamlockConnection = RS.RenderStepped:Connect(function()
+        if not root or not hum or hum.Health <= 0 then
+            return
+        end
+
+        local LookVector = cam.CFrame.LookVector
+        local YRotation = math.atan2(
+            -LookVector.X,
+            -LookVector.Z
+        )
+
+        root.CFrame = CFrame.new(root.Position)
+            * CFrame.Angles(0, YRotation, 0)
+
+        if UIS.MouseEnabled then
+            UIS.MouseBehavior = Enum.MouseBehavior.LockCenter
+        end
+    end)
+end
+
+local function DisableCamlock()
+    if CamlockConnection then
+        CamlockConnection:Disconnect()
+        CamlockConnection = nil
+    end
+
+    if hum then
+        hum.CameraOffset = OriginalCameraOffset or Vector3.zero
+        hum.AutoRotate = OriginalAutoRotate ~= false
+    end
+
+    if UIS.MouseEnabled then
+        UIS.MouseBehavior =
+            OriginalMouseBehavior or Enum.MouseBehavior.Default
+    end
+end
+
+Buttonlock.MouseButton1Click:Connect(function()
+    CamlockActive = not CamlockActive
+
+    if CamlockActive then
+        EnableCamlock()
+
+        Buttonlock.Text = "Camlock: Enabled"
+        Buttonlock.TextColor3 = Color3.fromRGB(10, 255, 0)
+    else
+        DisableCamlock()
+
+        Buttonlock.Text = "Camlock: Disabled"
+        Buttonlock.TextColor3 = Color3.fromRGB(255, 10, 0)
+    end
+end)
+
+Player.CharacterAdded:Connect(function(Char)
+    if CamlockConnection then
+        CamlockConnection:Disconnect()
+        CamlockConnection = nil
+    end
+
+    char = Char
+    root = Char:WaitForChild("HumanoidRootPart")
+    hum = Char:WaitForChild("Humanoid")
+
+    if CamlockActive then
+        EnableCamlock()
+    end
+end)
+
+
 local TimeNumber = 0
 
 NightDay.MouseButton1Click:Connect(function()
@@ -676,8 +763,6 @@ NightDay.MouseButton1Click:Connect(function()
         Lighting.ClockTime = Lighting.ClockTime
     end
 end)
-
-
 
 local NumberPage = 1
 local MaxPage = 4
