@@ -669,19 +669,19 @@ NightDay.MouseButton1Click:Connect(function()
     if TimeNumber == 0 then
         Lighting.ClockTime = Lighting.ClockTime .. "PM or AM, undefined"
     elseif TimeNumber == 1 then
-        Lighting.Text = Lighting.ClockTime
+        NightDay.Text = Lighting.ClockTime
         Lighting.ClockTime = 12
     elseif TimeNumber == 2 then
         Lighting.ClockTime = 20
-        Lighting.Text = Lighting.ClockTime
+        NightDay.Text = Lighting.ClockTime
     elseif TimeNumber == 3 then
-        Lighting.Text = Lighting.ClockTime
+        NightDay.Text = Lighting.ClockTime
         Lighting.ClockTime = 1
     elseif TimeNumber == 4 then
-        Lighting.Text = Lighting.ClockTime
+        NightDay.Text = Lighting.ClockTime
         Lighting.Clock = 5
     elseif TimeNumber == 5 then
-        Lighting.Text = Lighting.ClockTime
+        NightDay.Text = Lighting.ClockTime
         Lighting.ClockTime = 9
     elseif TimeNumber == 6 then
         TimeNumber = 0
