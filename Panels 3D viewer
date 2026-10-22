@@ -664,7 +664,7 @@ end)
 local TimeNumber = 0
 
 NightDay.MouseButton1Click:Connect(function()
-    Number += 1
+    TimeNumber += 1
 
     if TimeNumber == 0 then
         Lighting.ClockTime = Lighting.ClockTime
