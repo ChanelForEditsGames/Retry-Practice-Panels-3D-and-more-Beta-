@@ -588,6 +588,97 @@ Sit.MouseButton1Click:Connect(function()
     end
 end)
 
+
+local UIS = game:GetService("UserInputService")
+
+local DoubleJumpActive = false
+local JumpCount = 0
+local StateConnection
+
+local function TrackHumanoid()
+    if StateConnection then
+        StateConnection:Disconnect()
+    end
+
+    JumpCount = 0
+
+    StateConnection = hum.StateChanged:Connect(function(_, NewState)
+        if NewState == Enum.HumanoidStateType.Landed then
+            JumpCount = 0
+        end
+    end)
+end
+
+TrackHumanoid()
+
+Player.CharacterAdded:Connect(function(Char)
+    char = Char
+    root = Char:WaitForChild("HumanoidRootPart")
+    hum = Char:WaitForChild("Humanoid")
+
+    TrackHumanoid()
+end)
+
+DoubleJump.MouseButton1Click:Connect(function()
+    DoubleJumpActive = not DoubleJumpActive
+
+    if DoubleJumpActive then
+        DoubleJump.Text = "DoubleJump: Enabled"
+        DoubleJump.TextColor3 = Color3.fromRGB(10, 255, 0)
+    else
+        DoubleJump.Text = "DoubleJump: Disabled"
+        DoubleJump.TextColor3 = Color3.fromRGB(255, 10, 0)
+        JumpCount = 0
+    end
+end)
+
+UIS.JumpRequest:Connect(function()
+    if not DoubleJumpActive or hum.Health <= 0 then
+        return
+    end
+
+    if hum.FloorMaterial ~= Enum.Material.Air then
+        JumpCount = 1
+    elseif JumpCount == 1 then
+        JumpCount = 2
+
+        hum:ChangeState(Enum.HumanoidStateType.Seated)
+        task.wait()
+        hum:ChangeState(Enum.HumanoidStateType.Jumping)
+    end
+end)
+
+
+local TimeNumber = 0
+
+NightDay.MouseButton1Click:Connect(function()
+    TimeNumber += 1
+
+    if TimeNumber == 0 then
+        Lighting.ClockTime = Lighting.ClockTime
+    elseif TimeNumber == 1 then
+        NightDay.Text = Lighting.ClockTime
+        Lighting.ClockTime = 12
+    elseif TimeNumber == 2 then
+        Lighting.ClockTime = 18
+        NightDay.Text = Lighting.ClockTime
+    elseif TimeNumber == 3 then
+        NightDay.Text = Lighting.ClockTime
+        Lighting.ClockTime = 23
+    elseif TimeNumber == 4 then
+        NightDay.Text = Lighting.ClockTime
+        Lighting.ClockTime = 5
+    elseif TimeNumber == 5 then
+        NightDay.Text = Lighting.ClockTime
+        Lighting.ClockTime = 9
+    elseif TimeNumber == 6 then
+        TimeNumber = 0
+        Lighting.ClockTime = Lighting.ClockTime
+    end
+end)
+
+
+
 local NumberPage = 1
 local MaxPage = 4
 local MinPage = 1
@@ -659,31 +750,4 @@ PButton.MouseButton1Click:Connect(function()
 		Frame2.Visible = false
 		Frame1.Visible = true
 	end
-end)
-
-local TimeNumber = 0
-
-NightDay.MouseButton1Click:Connect(function()
-    TimeNumber += 1
-
-    if TimeNumber == 0 then
-        Lighting.ClockTime = Lighting.ClockTime .. "PM or AM, undefined"
-    elseif TimeNumber == 1 then
-        NightDay.Text = Lighting.ClockTime
-        Lighting.ClockTime = 12
-    elseif TimeNumber == 2 then
-        Lighting.ClockTime = 18
-        NightDay.Text = Lighting.ClockTime
-    elseif TimeNumber == 3 then
-        NightDay.Text = Lighting.ClockTime
-        Lighting.ClockTime = 23
-    elseif TimeNumber == 4 then
-        NightDay.Text = Lighting.ClockTime
-        Lighting.ClockTime = 5
-    elseif TimeNumber == 5 then
-        NightDay.Text = Lighting.ClockTime
-        Lighting.ClockTime = 9
-    elseif TimeNumber == 6 then
-        TimeNumber = 0
-    end
 end)
