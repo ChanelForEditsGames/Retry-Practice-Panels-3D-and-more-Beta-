@@ -490,7 +490,7 @@ DoubleJump.Parent = Frame4
 
 local NightDay = Instance.new("TextButton")
 NightDay.AnchorPoint = Vector2.new(0.5, 0.5)
-NightDay.Text = "12:00 PM"
+NightDay.Text = Lighting.ClockTime
 NightDay.TextScaled = true
 NightDay.BackgroundColor3 = Color3.fromRGB(25, 0, 0)
 NightDay.TextColor3 = Color3.fromRGB(255, 5, 0)
@@ -659,4 +659,26 @@ PButton.MouseButton1Click:Connect(function()
 		Frame2.Visible = false
 		Frame1.Visible = true
 	end
+end)
+
+local TimeNumber = 0
+
+NightDay.MouseButton1Click:Connect(function()
+    Number += 1
+
+    if TimeNumber == 0 then
+        Lighting.ClockTime = Lighting.ClockTime
+    elseif TimeNumber == 1 then
+        Lighting.ClockTime = 12
+    elseif TimeNumber == 2 then
+        Lighting.ClockTime = 20
+    elseif TimeNumber == 3 then
+        Lighting.ClockTime = 1
+    elseif TimeNumber == 4 then
+        Lighting.Clock = 5
+    elseif TimeNumber == 5 then
+        Lighting.ClockTime = 9
+    elseif TimeNumber == 6 then
+        TimeNumber = 0
+    end
 end)
